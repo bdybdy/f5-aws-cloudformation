@@ -741,6 +741,7 @@
            "}\n",
            "declare -a tmsh=()\n",
            "date\n",
+           "while [ $(grep -c 'Tmm ready - links up' /var/log/ltm) -lt 2 ]; do echo `date` 'Waiting for \"Tmm ready - links up\"'; continue; done;echo 'Tmm ready - links up'\n"
            "echo 'starting custom-config.sh'\n",
            "tmsh+=(\n",
            "\"tmsh load sys application template /config/cloud/aws/f5.service_discovery.tmpl\"\n",
