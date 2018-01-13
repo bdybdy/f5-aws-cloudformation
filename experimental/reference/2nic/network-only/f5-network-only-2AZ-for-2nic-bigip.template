@@ -10,7 +10,7 @@
    ]
   }
  },
- "Description": "Template Version 2.8.0: AWS CloudFormation Template for creating network components for a 2 Availability Zone VPC",
+ "Description": "Template Version 2.8.1: AWS CloudFormation Template for creating network components for a 2 Availability Zone VPC",
  "Metadata": {
   "AWS::CloudFormation::Interface": {
    "ParameterGroups": [
@@ -172,7 +172,7 @@
     }
    }
   },
-  "Version": "2.8.0"
+  "Version": "2.8.1"
  },
  "Outputs": {
   "Az1ApplicationSubnet": {

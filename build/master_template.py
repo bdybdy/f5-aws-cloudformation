@@ -1893,7 +1893,8 @@ def main():
                             "exit 1\n",
                             "}\n",
                             "declare -a tmsh=()\n",
-                            "date\n",
+                            "echo `date` 'Waiting for \"Tmm ready - links up\"'\n",
+                            "while [ $(grep -c 'Tmm ready - links up' /var/log/ltm) -lt 2 ]; do continue; done;echo `date` 'Tmm ready - links up'\n",
                             "echo 'starting custom-config.sh'\n",
                             "tmsh+=(\n"
                         ]
@@ -2116,6 +2117,7 @@ def main():
                                 "\"tmsh save /sys config\")\n",
                                 "for CMD in \"${tmsh[@]}\"\n",
                                 "do\n",
+                                "  \"/config/cloud/aws/node_modules/f5-cloud-libs/scripts/waitForMcp.sh\"\n",
                                 "    if $CMD;then\n",
                                 "        echo \"command $CMD successfully executed.\"\n",
                                 "    else\n",
