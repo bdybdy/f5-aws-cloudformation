@@ -64,9 +64,9 @@
     "Good": "ami-4b4c0927"
    },
    "us-east-1": {
-    "Best": "ami-12a92668",
-    "Better": "ami-7fad2205",
-    "Good": "ami-f6af208c"
+    "Best": "ami-2e89db54",
+    "Better": "ami-858ad8ff",
+    "Good": "ami-6c500316"
    },
    "us-east-2": {
     "Best": "ami-74193711",
@@ -1130,6 +1130,14 @@
            "POOLMEMPORT=80\n",
            "APPNAME='demo-app-1'\n",
            "VIRTUALSERVERPORT=80\n",
+           "EXTIP='",
+           {
+            "Fn::GetAtt": [
+             "Bigip1subnet1Az1Interface",
+             "PrimaryPrivateIpAddress"
+            ]
+           },
+           "'\n",
            "EXTPRIVIP='",
            {
             "Fn::Select": [
@@ -1140,14 +1148,6 @@
                "SecondaryPrivateIpAddresses"
               ]
              }
-            ]
-           },
-           "'\n",
-           "EXTIP='",
-           {
-            "Fn::GetAtt": [
-             "Bigip1subnet1Az1Interface",
-             "PrimaryPrivateIpAddress"
             ]
            },
            "'\n",
@@ -1872,6 +1872,14 @@
            "POOLMEMPORT=80\n",
            "APPNAME='demo-app-1'\n",
            "VIRTUALSERVERPORT=80\n",
+           "EXTIP='",
+           {
+            "Fn::GetAtt": [
+             "Bigip2subnet1Az1Interface",
+             "PrimaryPrivateIpAddress"
+            ]
+           },
+           "'\n",
            "EXTPRIVIP='",
            {
             "Fn::Select": [
@@ -1882,14 +1890,6 @@
                "SecondaryPrivateIpAddresses"
               ]
              }
-            ]
-           },
-           "'\n",
-           "EXTIP='",
-           {
-            "Fn::GetAtt": [
-             "Bigip2subnet1Az1Interface",
-             "PrimaryPrivateIpAddress"
             ]
            },
            "'\n",

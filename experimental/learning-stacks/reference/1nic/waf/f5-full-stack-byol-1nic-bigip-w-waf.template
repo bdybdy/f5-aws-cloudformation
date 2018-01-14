@@ -64,9 +64,9 @@
     "Good": "ami-4b4c0927"
    },
    "us-east-1": {
-    "Best": "ami-12a92668",
-    "Better": "ami-7fad2205",
-    "Good": "ami-f6af208c"
+    "Best": "ami-2e89db54",
+    "Better": "ami-858ad8ff",
+    "Good": "ami-6c500316"
    },
    "us-east-2": {
     "Best": "ami-74193711",
@@ -965,19 +965,6 @@
            "POOLMEMPORT=80\n",
            "APPNAME='demo-app-1'\n",
            "VIRTUALSERVERPORT=80\n",
-           "EXTPRIVIP='",
-           {
-            "Fn::Select": [
-             "0",
-             {
-              "Fn::GetAtt": [
-               "Bigip1subnet1Az1Interface",
-               "SecondaryPrivateIpAddresses"
-              ]
-             }
-            ]
-           },
-           "'\n",
            "PROGNAME=$(basename $0)\n",
            "function error_exit {\n",
            "echo \"${PROGNAME}: ${1:-\\\"Unknown Error\\\"}\" 1>&2\n",

@@ -1861,11 +1861,12 @@ def main():
                                     "POOLMEMPORT=80\n",
                                     "APPNAME='demo-app-1'\n",
                                     "VIRTUALSERVERPORT=80\n",
-                                    "EXTPRIVIP='", Select("0", GetAtt(ExternalInterface, "SecondaryPrivateIpAddresses")), "'\n",
+                                    #"EXTPRIVIP='", Select("0", GetAtt(ExternalInterface, "SecondaryPrivateIpAddresses")), "'\n",
                               ]
             if ha_type != "standalone":
                 custom_sh += [
                                 "EXTIP='", GetAtt(ExternalInterface, "PrimaryPrivateIpAddress"), "'\n",
+                                "EXTPRIVIP='", Select("0", GetAtt(ExternalInterface, "SecondaryPrivateIpAddresses")), "'\n",
                                 "HOSTNAME=`curl -s -f --retry 20 http://169.254.169.254/latest/meta-data/hostname`\n",
                              ]
             if ha_type != "standalone" and (BIGIP_INDEX + 1) == CLUSTER_SEED:

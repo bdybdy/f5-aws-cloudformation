@@ -1349,6 +1349,14 @@
            "POOLMEMPORT=80\n",
            "APPNAME='demo-app-1'\n",
            "VIRTUALSERVERPORT=80\n",
+           "EXTIP='",
+           {
+            "Fn::GetAtt": [
+             "Bigip1subnet1Az1Interface",
+             "PrimaryPrivateIpAddress"
+            ]
+           },
+           "'\n",
            "EXTPRIVIP='",
            {
             "Fn::Select": [
@@ -1359,14 +1367,6 @@
                "SecondaryPrivateIpAddresses"
               ]
              }
-            ]
-           },
-           "'\n",
-           "EXTIP='",
-           {
-            "Fn::GetAtt": [
-             "Bigip1subnet1Az1Interface",
-             "PrimaryPrivateIpAddress"
             ]
            },
            "'\n",
@@ -2096,6 +2096,14 @@
            "POOLMEMPORT=80\n",
            "APPNAME='demo-app-1'\n",
            "VIRTUALSERVERPORT=80\n",
+           "EXTIP='",
+           {
+            "Fn::GetAtt": [
+             "Bigip2subnet1Az2Interface",
+             "PrimaryPrivateIpAddress"
+            ]
+           },
+           "'\n",
            "EXTPRIVIP='",
            {
             "Fn::Select": [
@@ -2106,14 +2114,6 @@
                "SecondaryPrivateIpAddresses"
               ]
              }
-            ]
-           },
-           "'\n",
-           "EXTIP='",
-           {
-            "Fn::GetAtt": [
-             "Bigip2subnet1Az2Interface",
-             "PrimaryPrivateIpAddress"
             ]
            },
            "'\n",

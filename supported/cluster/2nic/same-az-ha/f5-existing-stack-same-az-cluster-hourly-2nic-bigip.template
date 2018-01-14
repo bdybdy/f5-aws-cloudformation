@@ -957,6 +957,19 @@
             ]
            },
            "'\n",
+           "EXTPRIVIP='",
+           {
+            "Fn::Select": [
+             "0",
+             {
+              "Fn::GetAtt": [
+               "Bigip1subnet1Az1Interface",
+               "SecondaryPrivateIpAddresses"
+              ]
+             }
+            ]
+           },
+           "'\n",
            "HOSTNAME=`curl -s -f --retry 20 http://169.254.169.254/latest/meta-data/hostname`\n",
            "PEER_EXTPRIVIP='",
            {
@@ -1646,6 +1659,19 @@
             "Fn::GetAtt": [
              "Bigip2subnet1Az1Interface",
              "PrimaryPrivateIpAddress"
+            ]
+           },
+           "'\n",
+           "EXTPRIVIP='",
+           {
+            "Fn::Select": [
+             "0",
+             {
+              "Fn::GetAtt": [
+               "Bigip2subnet1Az1Interface",
+               "SecondaryPrivateIpAddresses"
+              ]
+             }
             ]
            },
            "'\n",
