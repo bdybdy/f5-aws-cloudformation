@@ -505,13 +505,7 @@ def main():
             allowedvalues.extend([
                     "t2.medium",
                     "t2.large",
-                    "c3.2xlarge",
-                    "c3.4xlarge",
-                    "c3.8xlarge",
-                    "c4.xlarge",
-                    "c4.2xlarge",
-                    "c4.4xlarge",
-                    "c4.8xlarge",
+                    "m3.large",
                     "m3.xlarge",
                     "m3.2xlarge",
                     "m4.large",
@@ -519,7 +513,14 @@ def main():
                     "m4.2xlarge",
                     "m4.4xlarge",
                     "m4.10xlarge",
-                    "m4.16xlarge",
+                    "c3.xlarge",
+                    "c3.2xlarge",
+                    "c3.4xlarge",
+                    "c3.8xlarge",
+                    "c4.xlarge",
+                    "c4.2xlarge",
+                    "c4.4xlarge",
+                    "c4.8xlarge"
             ])
             if '5000' in marketplace:
                 defaultinstance="m4.10xlarge"
