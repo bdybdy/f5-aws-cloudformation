@@ -222,7 +222,7 @@
      "default": "Availability Zone 2"
     },
     "bigiqAddress": {
-     "default": "BIG-IQ address"
+     "default": "BIG-IQ address (private)"
     },
     "bigiqLicensePoolName": {
      "default": "BIG-IQ License Pool Name"
@@ -539,8 +539,8 @@
    "Type": "AWS::EC2::AvailabilityZone::Name"
   },
   "bigiqAddress": {
-   "ConstraintDescription": "Verify the IP address of the BIG-IQ device that contains the pool of licenses",
-   "Description": "IP address of the BIG-IQ device that contains the pool of BIG-IP licenses",
+   "ConstraintDescription": "Verify the private IP address of the BIG-IQ device that contains the pool of licenses",
+   "Description": "Private IP address of the BIG-IQ device that contains the pool of BIG-IP licenses",
    "MaxLength": "255",
    "MinLength": "1",
    "Type": "String"

@@ -349,7 +349,7 @@ def main():
                 "default": "Timezone (Olson)"
             },
             "bigiqAddress": {
-                "default": "BIG-IQ address"
+                "default": "BIG-IQ address (private)"
             },
             "bigiqLicensePoolName": {
                 "default": "BIG-IQ License Pool Name"
@@ -643,9 +643,9 @@ def main():
             bigiqAddress = t.add_parameter(Parameter(
                 "bigiqAddress",
                 MinLength="1",
-                ConstraintDescription="Verify the IP address of the BIG-IQ device that contains the pool of licenses",
+                ConstraintDescription="Verify the private IP address of the BIG-IQ device that contains the pool of licenses",
                 Type="String",
-                Description="IP address of the BIG-IQ device that contains the pool of BIG-IP licenses",
+                Description="Private IP address of the BIG-IQ device that contains the pool of BIG-IP licenses",
                 MaxLength="255",
             ))
             bigiqUsername = t.add_parameter(Parameter(

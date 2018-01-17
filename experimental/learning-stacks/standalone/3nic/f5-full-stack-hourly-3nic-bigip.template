@@ -343,7 +343,7 @@
      "default": "Availability Zone 2"
     },
     "bigiqAddress": {
-     "default": "BIG-IQ address"
+     "default": "BIG-IQ address (private)"
     },
     "bigiqLicensePoolName": {
      "default": "BIG-IQ License Pool Name"
