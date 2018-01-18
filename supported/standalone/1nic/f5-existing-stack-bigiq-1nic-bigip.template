@@ -553,7 +553,8 @@
            "--log-level debug ",
            "-o /var/log/1nicSetup.log ",
            "--wait-for ADMIN_CREATED ",
-           "--signal NETWORK_CONFIG_DONE ",
+           "--signal NETWORK_CONFIG_DONE; ",
+           "`/config/cloud/aws/node_modules/f5-cloud-libs/scripts/waitForMcp.sh;tmsh modify sys global-settings mgmt-dhcp disabled;/config/cloud/aws/node_modules/f5-cloud-libs/scripts/waitForMcp.sh;tmsh save sys config;`;",
            "&>> /var/log/cloudlibs-install.log < /dev/null &"
           ]
          ]
@@ -584,7 +585,6 @@
              "\"|sha512sum|cut -d \" \" -f 1`;",
              "NAME_SERVER=`/config/cloud/aws/getNameServer.sh mgmt`;",
              "nohup /config/waitThenRun.sh",
-             "`/config/cloud/aws/node_modules/f5-cloud-libs/scripts/waitForMcp.sh;tmsh modify sys global-settings mgmt-dhcp disabled;/config/cloud/aws/node_modules/f5-cloud-libs/scripts/waitForMcp.sh;tmsh save sys config;`;",
              "f5-rest-node /config/cloud/aws/node_modules/f5-cloud-libs/scripts/onboard.js",
              "--port 8443",
              "--ssl-port ",
@@ -637,7 +637,6 @@
             [
              "NAME_SERVER=`/config/cloud/aws/getNameServer.sh mgmt`;",
              "nohup /config/waitThenRun.sh",
-             "`/config/cloud/aws/node_modules/f5-cloud-libs/scripts/waitForMcp.sh;tmsh modify sys global-settings mgmt-dhcp disabled;/config/cloud/aws/node_modules/f5-cloud-libs/scripts/waitForMcp.sh;tmsh save sys config;`;",
              "f5-rest-node /config/cloud/aws/node_modules/f5-cloud-libs/scripts/onboard.js",
              "--port 8443",
              "--ssl-port ",
