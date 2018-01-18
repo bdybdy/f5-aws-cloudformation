@@ -583,6 +583,8 @@
              },
              "\"|sha512sum|cut -d \" \" -f 1`;",
              "NAME_SERVER=`/config/cloud/aws/getNameServer.sh mgmt`;",
+             "tmsh modify sys global-settings mgmt-dhcp disabled;",
+             "tmsh save sys config;",
              "nohup /config/waitThenRun.sh",
              "f5-rest-node /config/cloud/aws/node_modules/f5-cloud-libs/scripts/onboard.js",
              "--port 8443",
