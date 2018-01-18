@@ -570,7 +570,7 @@
            "--cwd /config/ ",
            "--log-level debug ",
            "-o /var/log/disableDhcp.log ",
-           "--wait-for NETWORK_CONFIG_DONE",
+           "--wait-for NETWORK_CONFIG_DONE ",
            "--signal DISABLE_DHCP_DONE ",
            "&>> /var/log/cloudlibs-install.log < /dev/null &"
           ]
