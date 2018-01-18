@@ -554,7 +554,7 @@
            "-o /var/log/1nicSetup.log ",
            "--wait-for ADMIN_CREATED ",
            "--signal NETWORK_CONFIG_DONE; ",
-           "`/config/cloud/aws/node_modules/f5-cloud-libs/scripts/waitForMcp.sh;tmsh modify sys global-settings mgmt-dhcp disabled;/config/cloud/aws/node_modules/f5-cloud-libs/scripts/waitForMcp.sh;tmsh save sys config;`;",
+           "`/config/cloud/aws/node_modules/f5-cloud-libs/scripts/waitForMcp.sh;tmsh modify sys global-settings mgmt-dhcp disabled;/config/cloud/aws/node_modules/f5-cloud-libs/scripts/waitForMcp.sh;tmsh save sys config;`; ",
            "&>> /var/log/cloudlibs-install.log < /dev/null &"
           ]
          ]
