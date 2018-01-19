@@ -609,7 +609,6 @@
               "Ref": "managementGuiPort"
              },
              "--wait-for DISABLE_DHCP_DONE",
-             "--signal ONBOARD_DONE",
              "-o /var/log/onboard.log",
              "--log-level debug",
              "--no-reboot",
@@ -662,7 +661,6 @@
               "Ref": "managementGuiPort"
              },
              "--wait-for DISABLE_DHCP_DONE",
-             "--signal ONBOARD_DONE",
              "-o /var/log/onboard.log",
              "--log-level debug",
              "--no-reboot",
@@ -701,6 +699,24 @@
          ]
         }
        },
+       "102-rerun-network-config": {
+        "command": {
+         "Fn::Join": [
+          "",
+          [
+           "nohup /config/waitThenRun.sh ",
+           "f5-rest-node /config/cloud/aws/node_modules/f5-cloud-libs/scripts/runScript.js ",
+           "--file /config/cloud/aws/node_modules/f5-cloud-libs/scripts/aws/1nicSetup.sh ",
+           "--cwd /config/cloud/aws/node_modules/f5-cloud-libs/scripts/aws ",
+           "--log-level debug ",
+           "-o /var/log/rerun1nicSetup.log ",
+           "--wait-for ONBOARD_DONE ",
+           "--signal RERUN_NETWORK_CONFIG_DONE ",
+           "&>> /var/log/cloudlibs-install.log < /dev/null &"
+          ]
+         ]
+        }
+       },
        "007-custom-config": {
         "command": {
          "Fn::Join": [
@@ -712,7 +728,7 @@
            "--cwd /config/cloud/aws",
            "-o /var/log/custom-config.log",
            "--log-level debug",
-           "--wait-for ONBOARD_DONE",
+           "--wait-for RERUN_NETWORK_CONFIG_DONE",
            "--signal CUSTOM_CONFIG_DONE",
            "&>> /var/log/cloudlibs-install.log < /dev/null &"
           ]
