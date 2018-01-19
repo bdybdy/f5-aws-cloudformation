@@ -915,17 +915,18 @@
            "echo \"${PROGNAME}: ${1:-\\\"Unknown Error\\\"}\" 1>&2\n",
            "exit 1\n",
            "}\n",
+           "echo 'starting disableDhcp.sh aws s3 cp'\n",
            "version=$(ls /opt/aws/ | grep awscli);\n",
            "AWSCLI=/opt/aws/$version;\n",
            "export PATH=$PATH:$AWSCLI/bin;\n",
            "export PYTHONPATH=$PYTHONPATH:$AWSCLI/lib64/python2.6/site-packages;\n",
            "export PYTHONPATH=$PYTHONPATH:$AWSCLI/lib/python2.6/site-packages;\n",
-           "date"
-           "sleep 300"
-           "date"
-           "aws s3 cp s3://bigiqtest/v5x.txt /config/cloud/aws/.bigiq;",
+           "date;\n",
+           "sleep 300;\n",
+           "date;\n",
+           "aws s3 cp s3://bigiqtest/v5x.txt /config/cloud/aws/.bigiq;\n",
            "declare -a tmsh=()\n",
-           "echo 'starting disableDhcp.sh'\n",
+           "echo 'starting disableDhcp.sh mgmt-dhcp disabled'\n",
            "tmsh+=(\n",
            "\"tmsh modify /sys global-settings mgmt-dhcp disabled\"\n",
            "\"tmsh save /sys config\")\n",
