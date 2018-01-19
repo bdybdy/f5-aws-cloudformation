@@ -688,7 +688,7 @@
              {
               "Ref": "bigiqUsername"
              },
-             "--big-iq-password-uri /config/cloud/aws/.bigiq",
+             "--big-iq-password-uri file://config/cloud/aws/.bigiq",
              "--license-pool-name ",
              {
               "Ref": "bigiqLicensePoolName"
