@@ -636,12 +636,6 @@
             [
              "NAME_SERVER=`/config/cloud/aws/getNameServer.sh mgmt`;",
              "nohup /config/waitThenRun.sh",
-             "f5-rest-node /config/cloud/aws/node_modules/f5-cloud-libs/scripts/runScript.js",
-             "--file /config/disableDhcp.sh",
-             "--cwd /config/",
-             "--log-level debug",
-             "-o /var/log/disableDhcp.log",
-             "--wait-for NETWORK_CONFIG_DONE;",
              "f5-rest-node /config/cloud/aws/node_modules/f5-cloud-libs/scripts/onboard.js",
              "--port 8443",
              "--ssl-port ",
