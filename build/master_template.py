@@ -1667,6 +1667,7 @@ def main():
                               " &"
                             ]
             unpack_libs =       [
+                                    "mkdir -p /var/log/cloud/aws;",
                                     "nohup /config/installCloudLibs.sh",
                                     "&>> /var/log/cloud/aws/cloudlibs-install.log < /dev/null &"
                                 ]
@@ -2201,9 +2202,6 @@ def main():
 
                                         "001-disable-1nicautoconfig": {
                                             "command": "/usr/bin/setdb provision.1nicautoconfig disable"
-                                        },
-                                        "100-create-log-directory": {
-                                            "command": "mkdir -p /var/log/cloud/aws"
                                         },
                                         "002-install-libs": {
                                             "command": { "Fn::Join" : [ " ", unpack_libs

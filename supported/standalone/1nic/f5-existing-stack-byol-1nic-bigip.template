@@ -471,6 +471,7 @@
          "Fn::Join": [
           " ",
           [
+           "mkdir -p /var/log/cloud/aws;",
            "nohup /config/installCloudLibs.sh",
            "&>> /var/log/cloud/aws/cloudlibs-install.log < /dev/null &"
           ]
@@ -677,9 +678,6 @@
           ]
          ]
         }
-       },
-       "100-create-log-directory": {
-        "command": "mkdir -p /var/log/cloud/aws"
        }
       },
       "files": {
