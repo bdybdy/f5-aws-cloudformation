@@ -165,7 +165,7 @@
     "Good1000Mbps": "ami-1aab2460",
     "Good200Mbps": "ami-09ac2373",
     "Good25Mbps": "ami-18ab2462",
-    "Good5000Mbps": "ami-64901f1e"
+    "Good5000Mbps": "ami-3eda8444"
    },
    "us-east-2": {
     "Best1000Mbps": "ami-da1b35bf",
