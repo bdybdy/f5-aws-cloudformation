@@ -1646,8 +1646,8 @@ def main():
                                 " --file f5-rest-node",
                                 " --cl-args '/config/cloud/aws/node_modules/f5-cloud-libs/scripts/generatePassword --file /config/cloud/aws/.adminPassword'",
                                 " --log-level verbose",
-                                " -o /var/log/generatePassword.log",
-                                " &>> /var/log/cloudlibs-install.log < /dev/null",
+                                " -o /var/log/cloud/aws/generatePassword.log",
+                                " &>> /var/log/cloud/aws/cloudlibs-install.log < /dev/null",
                                 " &"
                                 ]
             admin_user  =   [
@@ -1662,13 +1662,13 @@ def main():
                               " --password-file /config/cloud/aws/.adminPassword",
                               "'",
                               " --log-level verbose",
-                              " -o /var/log/createUser.log",
-                              " &>> /var/log/cloudlibs-install.log < /dev/null",
+                              " -o /var/log/cloud/aws/createUser.log",
+                              " &>> /var/log/cloud/aws/cloudlibs-install.log < /dev/null",
                               " &"
                             ]
             unpack_libs =       [
                                     "nohup /config/installCloudLibs.sh",
-                                    "&>> /var/log/cloudlibs-install.log < /dev/null &"
+                                    "&>> /var/log/cloud/aws/cloudlibs-install.log < /dev/null &"
                                 ]
 
             onboard_BIG_IP =    [
@@ -1682,7 +1682,7 @@ def main():
                                     "f5-rest-node /config/cloud/aws/node_modules/f5-cloud-libs/scripts/runScript.js",
                                     "--file /config/cloud/aws/custom-config.sh",
                                     "--cwd /config/cloud/aws",
-                                    "-o /var/log/custom-config.log",
+                                    "-o /var/log/cloud/aws/custom-config.log",
                                     "--log-level debug",
                                     "--wait-for ONBOARD_DONE",
                                     "--signal CUSTOM_CONFIG_DONE",
@@ -1719,27 +1719,27 @@ def main():
                                     "nohup /config/waitThenRun.sh",
                                     "f5-rest-node /config/cloud/aws/node_modules/f5-cloud-libs/scripts/runScript.js",
                                     "--file /config/cloud/aws/rm-password.sh",
-                                    "-o /var/log/rm-password.log",
+                                    "-o /var/log/cloud/aws/rm-password.log",
                                     "--log-level debug",
                                     ]
             if ha_type == "standalone":
                 rm_password_command +=  [
                                         "--wait-for CUSTOM_CONFIG_DONE",
                                         "--signal PASSWORD_REMOVED",
-                                        "&>> /var/log/cloudlibs-install.log < /dev/null &"
+                                        "&>> /var/log/cloud/aws/cloudlibs-install.log < /dev/null &"
                                         ]
             if ha_type != "standalone" and (BIGIP_INDEX) == CLUSTER_SEED:
                 rm_password_command +=   [
                                     "--wait-for CLUSTER_DONE",
                                     "--signal PASSWORD_REMOVED",
-                                    "&>> /var/log/cloudlibs-install.log < /dev/null &"
+                                    "&>> /var/log/cloud/aws/cloudlibs-install.log < /dev/null &"
                                         ]
                 cluster_command +=   [
                                         "nohup /config/waitThenRun.sh",
                                         "f5-rest-node /config/cloud/aws/node_modules/f5-cloud-libs/scripts/cluster.js",
                                         "--wait-for CUSTOM_CONFIG_DONE",
                                         "--signal CLUSTER_DONE",
-                                        "-o /var/log/cluster.log",
+                                        "-o /var/log/cloud/aws/cluster.log",
                                         "--log-level debug",
                                         "--host localhost",
                                         "--user admin",
@@ -1759,13 +1759,13 @@ def main():
                                         "--join-group",
                                         "--device-group across_az_failover_group",
                                         "--remote-host ",GetAtt("Bigip1ManagementInterface", "PrimaryPrivateIpAddress"),
-                                        "&>> /var/log/cloudlibs-install.log < /dev/null &"
+                                        "&>> /var/log/cloud/aws/cloudlibs-install.log < /dev/null &"
                                     ]
             if ha_type != "standalone" and (BIGIP_INDEX + 1) == CLUSTER_SEED:
                 rm_password_command +=   [
                                             "--wait-for CLUSTER_DONE",
                                             "--signal PASSWORD_REMOVED",
-                                            "&>> /var/log/cloudlibs-install.log < /dev/null &"
+                                            "&>> /var/log/cloud/aws/cloudlibs-install.log < /dev/null &"
                                          ]
                 cluster_command +=   [
                                         "HOSTNAME=`curl -s -f --retry 20 http://169.254.169.254/latest/meta-data/hostname`;",
@@ -1773,7 +1773,7 @@ def main():
                                         "f5-rest-node /config/cloud/aws/node_modules/f5-cloud-libs/scripts/cluster.js",
                                         "--wait-for CUSTOM_CONFIG_DONE",
                                         "--signal CLUSTER_DONE",
-                                        "-o /var/log/cluster.log",
+                                        "-o /var/log/cloud/aws/cluster.log",
                                         "--log-level debug",
                                         "--host localhost",
                                         "--user admin",
@@ -1788,10 +1788,10 @@ def main():
                                         "--network-failover",
                                         "--device ${HOSTNAME}",
                                         "--auto-sync",
-                                        "&>> /var/log/cloudlibs-install.log < /dev/null &"
+                                        "&>> /var/log/cloud/aws/cloudlibs-install.log < /dev/null &"
                                      ]
             custom_command +=   [
-                                    "&>> /var/log/cloudlibs-install.log < /dev/null &"
+                                    "&>> /var/log/cloud/aws/cloudlibs-install.log < /dev/null &"
                                 ]
             onboard_BIG_IP_metrics = [
                 "REGION=\"",
@@ -1819,10 +1819,10 @@ def main():
                                     "--file /config/cloud/aws/node_modules/f5-cloud-libs/scripts/aws/1nicSetup.sh ",
                                     "--cwd /config/cloud/aws/node_modules/f5-cloud-libs/scripts/aws ",
                                     "--log-level debug ",
-                                    "-o /var/log/1nicSetup.log ",
+                                    "-o /var/log/cloud/aws/1nicSetup.log ",
                                     "--wait-for ADMIN_CREATED ",
                                     "--signal NETWORK_CONFIG_DONE ",
-                                    "&>> /var/log/cloudlibs-install.log < /dev/null &"
+                                    "&>> /var/log/cloud/aws/cloudlibs-install.log < /dev/null &"
                 ]
                 onboard_BIG_IP += [
                                     "NAME_SERVER=`/config/cloud/aws/getNameServer.sh mgmt`;",
@@ -1839,7 +1839,7 @@ def main():
                                   ]
             onboard_BIG_IP += [
                                 "--wait-for NETWORK_CONFIG_DONE",
-                                "-o /var/log/onboard.log",
+                                "-o /var/log/cloud/aws/onboard.log",
                                 "--log-level debug",
                                 "--no-reboot",
                                 "--host localhost",
@@ -1937,7 +1937,7 @@ def main():
                                     "--host localhost ",
                                     "--user admin ",
                                     "--password-url file:///config/cloud/aws/.adminPassword ",
-                                    "-o /var/log/network-config.log ",
+                                    "-o /var/log/cloud/aws/network-config.log ",
                                     "--log-level debug ",
                                     "--wait-for ADMIN_CREATED ",
                                     "--signal NETWORK_CONFIG_DONE ",
@@ -2001,7 +2001,7 @@ def main():
 
             if num_nics > 1:
                 network_config += [
-                                    "&>> /var/log/cloudlibs-install.log < /dev/null &"
+                                    "&>> /var/log/cloud/aws/cloudlibs-install.log < /dev/null &"
                                   ]
             # Disable DHCP if clustering.
             if ha_type != "standalone":
@@ -2035,11 +2035,11 @@ def main():
             onboard_BIG_IP_metrics += [
                 "--metrics \"cloudName:aws,region:${REGION},bigipVersion:" + BIGIP_VERSION + ",customerId:${CUSTOMERID},deploymentId:${DEPLOYMENTID},templateName:" + template_name + ",templateVersion:" + version + ",licenseType:" + license_type + "\"",
                 "--ping",
-                "&>> /var/log/cloudlibs-install.log < /dev/null &"
+                "&>> /var/log/cloud/aws/cloudlibs-install.log < /dev/null &"
             ]
             onboard_BIG_IP += [
                 "--ping",
-                "&>> /var/log/cloudlibs-install.log < /dev/null &"
+                "&>> /var/log/cloud/aws/cloudlibs-install.log < /dev/null &"
             ]
             # Cluster Devices if Cluster Seed
             if ha_type == "standalone" or (BIGIP_INDEX + 1) == CLUSTER_SEED:
@@ -2201,6 +2201,9 @@ def main():
 
                                         "001-disable-1nicautoconfig": {
                                             "command": "/usr/bin/setdb provision.1nicautoconfig disable"
+                                        },
+                                        "100-create-log-directory": {
+                                            "command": "mkdir -p /var/log/cloud/aws"
                                         },
                                         "002-install-libs": {
                                             "command": { "Fn::Join" : [ " ", unpack_libs
