@@ -1082,10 +1082,10 @@
     "AWS::CloudFormation::Init": {
      "config": {
       "commands": {
-       "001-disable-1nicautoconfig": {
+       "000-disable-1nicautoconfig": {
         "command": "/usr/bin/setdb provision.1nicautoconfig disable"
        },
-       "002-install-libs": {
+       "010-install-libs": {
         "command": {
          "Fn::Join": [
           " ",
@@ -1097,7 +1097,7 @@
          ]
         }
        },
-       "003-generate-password": {
+       "020-generate-password": {
         "command": {
          "Fn::Join": [
           "",
@@ -1115,7 +1115,7 @@
          ]
         }
        },
-       "004-create-admin-user": {
+       "030-create-admin-user": {
         "command": {
          "Fn::Join": [
           "",
@@ -1136,7 +1136,7 @@
          ]
         }
        },
-       "005-network-config": {
+       "040-network-config": {
         "command": {
          "Fn::Join": [
           "",
@@ -1171,7 +1171,7 @@
          ]
         }
        },
-       "006-onboard-BIG-IP": {
+       "050-onboard-BIG-IP": {
         "command": {
          "Fn::If": [
           "optin",
@@ -1256,7 +1256,7 @@
          ]
         }
        },
-       "007-custom-config": {
+       "060-custom-config": {
         "command": {
          "Fn::Join": [
           " ",
@@ -1267,14 +1267,14 @@
            "--cwd /config/cloud/aws",
            "-o /var/log/cloud/aws/custom-config.log",
            "--log-level debug",
-           "--wait-for ONBOARD_DONE",
            "--signal CUSTOM_CONFIG_DONE",
+           "--wait-for ONBOARD_DONE",
            "&>> /var/log/cloud/aws/cloudlibs-install.log < /dev/null &"
           ]
          ]
         }
        },
-       "008-cluster": {
+       "065-cluster": {
         "command": {
          "Fn::Join": [
           " ",
@@ -1314,7 +1314,7 @@
          ]
         }
        },
-       "009-rm-password": {
+       "070-rm-password": {
         "command": {
          "Fn::Join": [
           " ",
@@ -1333,6 +1333,49 @@
        }
       },
       "files": {
+       "/config/bigiqConfig.sh": {
+        "content": {
+         "Fn::Join": [
+          "",
+          [
+           "#!/bin/bash\n",
+           "PROGNAME=$(basename $0)\n",
+           "function error_exit {\n",
+           "echo \"${PROGNAME}: ${1:-\\\"Unknown Error\\\"}\" 1>&2\n",
+           "exit 1\n",
+           "}\n",
+           "echo 'starting disableDhcp.sh aws s3 cp'\n",
+           "version=$(ls /opt/aws/ | grep awscli);\n",
+           "AWSCLI=/opt/aws/$version;\n",
+           "export PATH=$PATH:$AWSCLI/bin;\n",
+           "export PYTHONPATH=$PYTHONPATH:$AWSCLI/lib64/python2.6/site-packages;\n",
+           "export PYTHONPATH=$PYTHONPATH:$AWSCLI/lib/python2.6/site-packages;\n",
+           "date;\n",
+           "sleep 300;\n",
+           "date;\n",
+           "aws s3 cp s3://bigiqtest/v5x.txt /config/cloud/aws/.bigiq;\n",
+           "declare -a tmsh=()\n",
+           "echo 'starting disableDhcp.sh mgmt-dhcp disabled'\n",
+           "tmsh+=(\n",
+           "\"tmsh modify /sys global-settings mgmt-dhcp disabled\"\n",
+           "\"tmsh save /sys config\")\n",
+           "for CMD in \"${tmsh[@]}\"\n",
+           "do\n",
+           "  \"/config/cloud/aws/node_modules/f5-cloud-libs/scripts/waitForMcp.sh\"\n",
+           "    if $CMD;then\n",
+           "        echo \"command $CMD successfully executed.\"\n",
+           "    else\n",
+           "        error_exit \"$LINENO: An error has occurred while executing $CMD. Aborting!\"\n",
+           "    fi\n",
+           "done\n",
+           "date\n"
+          ]
+         ]
+        },
+        "group": "root",
+        "mode": "000755",
+        "owner": "root"
+       },
        "/config/cloud/aws/custom-config.sh": {
         "content": {
          "Fn::Join": [
@@ -1829,10 +1872,10 @@
     "AWS::CloudFormation::Init": {
      "config": {
       "commands": {
-       "001-disable-1nicautoconfig": {
+       "000-disable-1nicautoconfig": {
         "command": "/usr/bin/setdb provision.1nicautoconfig disable"
        },
-       "002-install-libs": {
+       "010-install-libs": {
         "command": {
          "Fn::Join": [
           " ",
@@ -1844,7 +1887,7 @@
          ]
         }
        },
-       "003-generate-password": {
+       "020-generate-password": {
         "command": {
          "Fn::Join": [
           "",
@@ -1862,7 +1905,7 @@
          ]
         }
        },
-       "004-create-admin-user": {
+       "030-create-admin-user": {
         "command": {
          "Fn::Join": [
           "",
@@ -1883,7 +1926,7 @@
          ]
         }
        },
-       "005-network-config": {
+       "040-network-config": {
         "command": {
          "Fn::Join": [
           "",
@@ -1918,7 +1961,7 @@
          ]
         }
        },
-       "006-onboard-BIG-IP": {
+       "050-onboard-BIG-IP": {
         "command": {
          "Fn::If": [
           "optin",
@@ -2003,7 +2046,7 @@
          ]
         }
        },
-       "007-custom-config": {
+       "060-custom-config": {
         "command": {
          "Fn::Join": [
           " ",
@@ -2014,14 +2057,14 @@
            "--cwd /config/cloud/aws",
            "-o /var/log/cloud/aws/custom-config.log",
            "--log-level debug",
-           "--wait-for ONBOARD_DONE",
            "--signal CUSTOM_CONFIG_DONE",
+           "--wait-for ONBOARD_DONE",
            "&>> /var/log/cloud/aws/cloudlibs-install.log < /dev/null &"
           ]
          ]
         }
        },
-       "008-cluster": {
+       "065-cluster": {
         "command": {
          "Fn::Join": [
           " ",
@@ -2062,7 +2105,7 @@
          ]
         }
        },
-       "009-rm-password": {
+       "070-rm-password": {
         "command": {
          "Fn::Join": [
           " ",
@@ -2081,6 +2124,49 @@
        }
       },
       "files": {
+       "/config/bigiqConfig.sh": {
+        "content": {
+         "Fn::Join": [
+          "",
+          [
+           "#!/bin/bash\n",
+           "PROGNAME=$(basename $0)\n",
+           "function error_exit {\n",
+           "echo \"${PROGNAME}: ${1:-\\\"Unknown Error\\\"}\" 1>&2\n",
+           "exit 1\n",
+           "}\n",
+           "echo 'starting disableDhcp.sh aws s3 cp'\n",
+           "version=$(ls /opt/aws/ | grep awscli);\n",
+           "AWSCLI=/opt/aws/$version;\n",
+           "export PATH=$PATH:$AWSCLI/bin;\n",
+           "export PYTHONPATH=$PYTHONPATH:$AWSCLI/lib64/python2.6/site-packages;\n",
+           "export PYTHONPATH=$PYTHONPATH:$AWSCLI/lib/python2.6/site-packages;\n",
+           "date;\n",
+           "sleep 300;\n",
+           "date;\n",
+           "aws s3 cp s3://bigiqtest/v5x.txt /config/cloud/aws/.bigiq;\n",
+           "declare -a tmsh=()\n",
+           "echo 'starting disableDhcp.sh mgmt-dhcp disabled'\n",
+           "tmsh+=(\n",
+           "\"tmsh modify /sys global-settings mgmt-dhcp disabled\"\n",
+           "\"tmsh save /sys config\")\n",
+           "for CMD in \"${tmsh[@]}\"\n",
+           "do\n",
+           "  \"/config/cloud/aws/node_modules/f5-cloud-libs/scripts/waitForMcp.sh\"\n",
+           "    if $CMD;then\n",
+           "        echo \"command $CMD successfully executed.\"\n",
+           "    else\n",
+           "        error_exit \"$LINENO: An error has occurred while executing $CMD. Aborting!\"\n",
+           "    fi\n",
+           "done\n",
+           "date\n"
+          ]
+         ]
+        },
+        "group": "root",
+        "mode": "000755",
+        "owner": "root"
+       },
        "/config/cloud/aws/custom-config.sh": {
         "content": {
          "Fn::Join": [
