@@ -2179,13 +2179,13 @@ def main():
                                  ]
                 }
             }
-            d["070-cluster"] = {
+            d["065-cluster"] = {
                 "command": {
                     "Fn::Join" : [ " ", cluster_command
                                  ]
                 }
             }
-            d["080-rm-password"] = {
+            d["070-rm-password"] = {
                 "command": {
                     "Fn::Join" : [ " ", rm_password_command
                                  ]

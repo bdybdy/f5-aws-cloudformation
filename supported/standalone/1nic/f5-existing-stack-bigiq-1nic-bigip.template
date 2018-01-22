@@ -703,7 +703,7 @@
          ]
         }
        },
-       "070-cluster": {
+       "065-cluster": {
         "command": {
          "Fn::Join": [
           " ",
@@ -711,7 +711,7 @@
          ]
         }
        },
-       "080-rm-password": {
+       "070-rm-password": {
         "command": {
          "Fn::Join": [
           " ",
