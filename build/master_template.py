@@ -1473,11 +1473,19 @@ def main():
                                 Ref(bigiqAddress),
                                 "--big-iq-user ",
                                 Ref(bigiqUsername),
-                                "--big-iq-password-uri ",
-                                Ref(bigiqPasswordS3Arn),
                                 "--license-pool-name ",
                                 Ref(bigiqLicensePoolName),
                                 ]
+                if num_nics == 1:
+                    license_bigiq += [
+                                    "--big-iq-password-uri file:///config/cloud/aws/.bigiq ",
+                                    ]
+                else:
+                    license_bigiq += [
+                                    "--big-iq-password-uri ",
+                                    Ref(bigiqPasswordS3Arn),
+                                    ]
+
 
             ## variable used to provision asm
             provision_asm = [
@@ -1621,6 +1629,39 @@ def main():
                                     "done",
                                     "\"$@\""
                                 ]
+            bigiq_config_sh =  [
+                                "#!/bin/bash\n",
+                                "PROGNAME=$(basename $0)\n",
+                                "function error_exit {\n",
+                                "echo \"${PROGNAME}: ${1:-\\\"Unknown Error\\\"}\" 1>&2\n",
+                                "exit 1\n",
+                                "}\n",
+                                "echo 'starting disableDhcp.sh aws s3 cp'\n",
+                                "version=$(ls /opt/aws/ | grep awscli);\n",
+                                "AWSCLI=/opt/aws/$version;\n",
+                                "export PATH=$PATH:$AWSCLI/bin;\n",
+                                "export PYTHONPATH=$PYTHONPATH:$AWSCLI/lib64/python2.6/site-packages;\n",
+                                "export PYTHONPATH=$PYTHONPATH:$AWSCLI/lib/python2.6/site-packages;\n",
+                                "date;\n",
+                                "sleep 300;\n",
+                                "date;\n",
+                                "aws s3 cp s3://bigiqtest/v5x.txt /config/cloud/aws/.bigiq;\n",
+                                "declare -a tmsh=()\n",
+                                "echo 'starting disableDhcp.sh mgmt-dhcp disabled'\n",
+                                "tmsh+=(\n",
+                                "\"tmsh modify /sys global-settings mgmt-dhcp disabled\"\n",
+                                "\"tmsh save /sys config\")\n",
+                                "for CMD in \"${tmsh[@]}\"\n",
+                                "do\n",
+                                "  \"/config/cloud/aws/node_modules/f5-cloud-libs/scripts/waitForMcp.sh\"\n",
+                                "    if $CMD;then\n",
+                                "        echo \"command $CMD successfully executed.\"\n",
+                                "    else\n",
+                                "        error_exit \"$LINENO: An error has occurred while executing $CMD. Aborting!\"\n",
+                                "    fi\n",
+                                "done\n",
+                                "date\n",
+                            ]
             get_nameserver =    [
                                     "INTERFACE=$1",
                                     "INTERFACE_MAC=`ifconfig ${INTERFACE} | egrep HWaddr | awk '{print tolower($5)}'`",
@@ -1685,9 +1726,19 @@ def main():
                                     "--cwd /config/cloud/aws",
                                     "-o /var/log/cloud/aws/custom-config.log",
                                     "--log-level debug",
-                                    "--wait-for ONBOARD_DONE",
                                     "--signal CUSTOM_CONFIG_DONE",
                                 ]
+            if num_nics == 1 and license_type == "bigiq":
+                custom_command +=   [
+                                    "--wait-for RERUN_NETWORK_CONFIG_DONE",
+                                ]
+            else:
+                custom_command +=   [
+                                    "--wait-for ONBOARD_DONE",
+                                ]
+            custom_command +=   [
+                                "&>> /var/log/cloud/aws/cloudlibs-install.log < /dev/null &"
+                            ]
             cluster_command = []
             rm_password_sh =    [
                                         "#!/bin/bash\n",
@@ -1791,9 +1842,7 @@ def main():
                                         "--auto-sync",
                                         "&>> /var/log/cloud/aws/cloudlibs-install.log < /dev/null &"
                                      ]
-            custom_command +=   [
-                                    "&>> /var/log/cloud/aws/cloudlibs-install.log < /dev/null &"
-                                ]
+
             onboard_BIG_IP_metrics = [
                 "REGION=\"",
                 {
@@ -1832,14 +1881,34 @@ def main():
                                     "--port 8443",
                                     "--ssl-port ", Ref(managementGuiPort),
                 ]
+                if license_type == "bigiq":
+                    onboard_BIG_IP += [
+                                    "--wait-for BIGIQ_CONFIG_DONE",
+                    ]
+                    bigiq_config = [
+                                    "nohup /config/waitThenRun.sh ",
+                                    "f5-rest-node /config/cloud/aws/node_modules/f5-cloud-libs/scripts/runScript.js ",
+                                    "--file /config/bigiqConfig.sh ",
+                                    "--cwd /config/ ",
+                                    "--log-level debug ",
+                                    "-o /var/log/cloud/aws/bigiqConfig.log ",
+                                    "--wait-for NETWORK_CONFIG_DONE ",
+                                    "--signal BIGIQ_CONFIG_DONE ",
+                                    "&>> /var/log/cloudlibs-install.log < /dev/null &"
+                    ]
+                else:
+                    onboard_BIG_IP += [
+                                    "--wait-for NETWORK_CONFIG_DONE",
+                    ]
+
             if num_nics > 1:
                 onboard_BIG_IP += [
                                     "NAME_SERVER=`/config/cloud/aws/getNameServer.sh eth1`;",
                                     "nohup /config/waitThenRun.sh",
                                     "f5-rest-node /config/cloud/aws/node_modules/f5-cloud-libs/scripts/onboard.js",
+                                    "--wait-for NETWORK_CONFIG_DONE",
                                   ]
             onboard_BIG_IP += [
-                                "--wait-for NETWORK_CONFIG_DONE",
                                 "-o /var/log/cloud/aws/onboard.log",
                                 "--log-level debug",
                                 "--no-reboot",
@@ -2191,6 +2260,43 @@ def main():
                                  ]
                 }
             }
+            if num_nics == 1 and license_type == "bigiq":
+                d["045-bigiq-config"] = {
+                    "command": {
+                     "Fn::Join": [
+                      "",
+                      [
+                       "nohup /config/waitThenRun.sh ",
+                       "f5-rest-node /config/cloud/aws/node_modules/f5-cloud-libs/scripts/runScript.js ",
+                       "--file /config/bigiqConfig.sh ",
+                       "--cwd /config/ ",
+                       "--log-level debug ",
+                       "-o /var/log/cloud/aws/bigiqConfig.log ",
+                       "--wait-for NETWORK_CONFIG_DONE ",
+                       "--signal BIGIQ_CONFIG_DONE ",
+                       "&>> /var/log/cloudlibs-install.log < /dev/null &"
+                      ]
+                     ]
+                    }
+                   }
+                d["055-rerun-network-config"] = {
+                    "command": {
+                     "Fn::Join": [
+                      "",
+                      [
+                       "nohup /config/waitThenRun.sh ",
+                       "f5-rest-node /config/cloud/aws/node_modules/f5-cloud-libs/scripts/runScript.js ",
+                       "--file /config/cloud/aws/node_modules/f5-cloud-libs/scripts/aws/1nicSetup.sh ",
+                       "--cwd /config/cloud/aws/node_modules/f5-cloud-libs/scripts/aws ",
+                       "--log-level debug ",
+                       "-o /var/log/rerun1nicSetup.log ",
+                       "--wait-for ONBOARD_DONE ",
+                       "--signal RERUN_NETWORK_CONFIG_DONE ",
+                       "&>> /var/log/cloudlibs-install.log < /dev/null &"
+                      ]
+                     ]
+                    }
+                   }
 
             metadata = Metadata(
                     Init({
@@ -2247,6 +2353,12 @@ def main():
                                     ),
                                     '/config/cloud/aws/rm-password.sh': InitFile(
                                         content=Join('', rm_password_sh ),
+                                        mode='000755',
+                                        owner='root',
+                                        group='root'
+                                    ),
+                                    '/config/bigiqConfig.sh': InitFile(
+                                        content=Join('', bigiq_config_sh ),
                                         mode='000755',
                                         owner='root',
                                         group='root'
