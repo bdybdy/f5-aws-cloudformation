@@ -488,10 +488,10 @@
     "AWS::CloudFormation::Init": {
      "config": {
       "commands": {
-       "001-disable-1nicautoconfig": {
+       "000-disable-1nicautoconfig": {
         "command": "/usr/bin/setdb provision.1nicautoconfig disable"
        },
-       "002-install-libs": {
+       "010-install-libs": {
         "command": {
          "Fn::Join": [
           " ",
@@ -503,7 +503,7 @@
          ]
         }
        },
-       "003-generate-password": {
+       "020-generate-password": {
         "command": {
          "Fn::Join": [
           "",
@@ -521,7 +521,7 @@
          ]
         }
        },
-       "004-create-admin-user": {
+       "030-create-admin-user": {
         "command": {
          "Fn::Join": [
           "",
@@ -542,7 +542,7 @@
          ]
         }
        },
-       "005-network-config": {
+       "040-network-config": {
         "command": {
          "Fn::Join": [
           "",
@@ -560,7 +560,7 @@
          ]
         }
        },
-       "006-onboard-BIG-IP": {
+       "050-onboard-BIG-IP": {
         "command": {
          "Fn::If": [
           "optin",
@@ -685,7 +685,7 @@
          ]
         }
        },
-       "007-custom-config": {
+       "060-custom-config": {
         "command": {
          "Fn::Join": [
           " ",
@@ -703,7 +703,7 @@
          ]
         }
        },
-       "008-cluster": {
+       "070-cluster": {
         "command": {
          "Fn::Join": [
           " ",
@@ -711,7 +711,7 @@
          ]
         }
        },
-       "009-rm-password": {
+       "080-rm-password": {
         "command": {
          "Fn::Join": [
           " ",

@@ -2131,6 +2131,67 @@ def main():
                                 "### START CUSTOM CONFIGURTION\n",
                                 "### END CUSTOM CONFIGURATION"
                          ]
+
+            # Set commands dictionary
+            d = {}
+            d["000-disable-1nicautoconfig"] = {
+                "command": "/usr/bin/setdb provision.1nicautoconfig disable"
+            }
+            d["010-install-libs"] = {
+                "command": { 
+                    "Fn::Join" : [ " ", unpack_libs
+                                          ]
+                }
+            }
+            d["020-generate-password"] = {
+                "command": {
+                    "Fn::Join" : [ "", generate_password
+                                 ]
+                }
+            }
+            d["030-create-admin-user"] = {
+                "command": {
+                    "Fn::Join" : [ "", admin_user
+                                 ]
+                }
+            }
+            d["040-network-config"] = {
+                "command": {
+                    "Fn::Join": ["", network_config
+                                ]
+                }
+            }
+            d["050-onboard-BIG-IP"] = {
+                "command": {
+                    "Fn::If" :   [
+                                "optin",
+
+                        {"Fn::Join" : [ " ", onboard_BIG_IP_metrics
+                        ]},
+                        {"Fn::Join" : [ " ", onboard_BIG_IP
+                        ]},
+                    ]
+                }
+            }
+            d["060-custom-config"] = {
+                "command": {
+                    "Fn::Join" : [ " ", custom_command
+                                 ]
+                }
+            }
+            d["070-cluster"] = {
+                "command": {
+                    "Fn::Join" : [ " ", cluster_command
+                                 ]
+                }
+            }
+            d["080-rm-password"] = {
+                "command": {
+                    "Fn::Join" : [ " ", rm_password_command
+                                 ]
+                }
+            }
+
             metadata = Metadata(
                     Init({
                         'config': InitConfig(
@@ -2198,65 +2259,7 @@ def main():
                                     )
                                 }
                             ),
-                            commands={
-
-                                        "001-disable-1nicautoconfig": {
-                                            "command": "/usr/bin/setdb provision.1nicautoconfig disable"
-                                        },
-                                        "002-install-libs": {
-                                            "command": { "Fn::Join" : [ " ", unpack_libs
-                                                                      ]
-                                            }
-                                        },
-                                        "003-generate-password": {
-                                            "command": {
-                                                "Fn::Join" : [ "", generate_password
-                                                             ]
-                                            }
-                                        },
-                                        "004-create-admin-user": {
-                                            "command": {
-                                                "Fn::Join" : [ "", admin_user
-                                                             ]
-                                            }
-                                        },
-                                        "005-network-config": {
-                                            "command": {
-                                                "Fn::Join": ["", network_config
-                                                            ]
-                                            }
-                                        },
-                                        "006-onboard-BIG-IP": {
-                                            "command": {
-                                                "Fn::If" :   [
-                                                            "optin",
-
-                                                    {"Fn::Join" : [ " ", onboard_BIG_IP_metrics
-                                                    ]},
-                                                    {"Fn::Join" : [ " ", onboard_BIG_IP
-                                                    ]},
-                                                ]
-                                            }
-                                        },
-                                        "007-custom-config": {
-                                            "command": {
-                                                "Fn::Join" : [ " ", custom_command
-                                                             ]
-                                            }
-                                        },
-                                        "008-cluster": {
-                                            "command": {
-                                                "Fn::Join" : [ " ", cluster_command
-                                                             ]
-                                            }
-                                        },
-                                        "009-rm-password": {
-                                            "command": {
-                                                "Fn::Join" : [ " ", rm_password_command
-                                                             ]
-                                            }
-                                        },
-                            }
+                            commands=d
                         )
                     })
                 )
