@@ -987,8 +987,8 @@
            "tmsh+=(\n",
            "\"tmsh modify sys db dhclient.mgmt { value disable }\"\n",
            "\"tmsh modify cm device ${HOSTNAME} unicast-address { { effective-ip ${EXTIP} effective-port 1026 ip ${EXTIP} } }\"\n",
-           "\"tmsh load sys application template /config/cloud/aws/f5.aws_advanced_ha.v1.4.0rc1.tmpl\"\n",
-           "\"tmsh create /sys application service HA_Across_AZs template f5.aws_advanced_ha.v1.4.0rc1 tables add { eip_mappings__mappings { column-names { eip az1_vip az2_vip } rows { { row { ${VIPEIP} /Common/${EXTPRIVIP} /Common/${PEER_EXTPRIVIP} } } } } } variables add { eip_mappings__inbound { value yes } }\"\n",
+           "\"tmsh load sys application template /config/cloud/aws/f5.aws_advanced_ha.v1.4.0rc2.tmpl\"\n",
+           "\"tmsh create /sys application service HA_Across_AZs template f5.aws_advanced_ha.v1.4.0rc2 tables add { eip_mappings__mappings { column-names { eip az1_vip az2_vip } rows { { row { ${VIPEIP} /Common/${EXTPRIVIP} /Common/${PEER_EXTPRIVIP} } } } } } variables add { eip_mappings__inbound { value yes } }\"\n",
            "\"tmsh modify sys application service HA_Across_AZs.app/HA_Across_AZs execute-action definition\"\n",
            "\"tmsh load sys application template /config/cloud/aws/f5.service_discovery.tmpl\"\n",
            "\"tmsh save /sys config\")\n",
@@ -1011,11 +1011,11 @@
         "mode": "000755",
         "owner": "root"
        },
-       "/config/cloud/aws/f5.aws_advanced_ha.v1.4.0rc1.tmpl": {
+       "/config/cloud/aws/f5.aws_advanced_ha.v1.4.0rc2.tmpl": {
         "group": "root",
         "mode": "000755",
         "owner": "root",
-        "source": "https://raw.githubusercontent.com/F5Networks/f5-aws-cloudformation/v2.2.0/iApps/f5.aws_advanced_ha.v1.4.0rc1.tmpl"
+        "source": "https://raw.githubusercontent.com/F5Networks/f5-aws-cloudformation/v2.2.0/iApps/f5.aws_advanced_ha.v1.4.0rc2.tmpl"
        },
        "/config/cloud/aws/f5.service_discovery.tmpl": {
         "group": "root",
@@ -1781,11 +1781,11 @@
         "mode": "000755",
         "owner": "root"
        },
-       "/config/cloud/aws/f5.aws_advanced_ha.v1.4.0rc1.tmpl": {
+       "/config/cloud/aws/f5.aws_advanced_ha.v1.4.0rc2.tmpl": {
         "group": "root",
         "mode": "000755",
         "owner": "root",
-        "source": "https://raw.githubusercontent.com/F5Networks/f5-aws-cloudformation/v2.2.0/iApps/f5.aws_advanced_ha.v1.4.0rc1.tmpl"
+        "source": "https://raw.githubusercontent.com/F5Networks/f5-aws-cloudformation/v2.2.0/iApps/f5.aws_advanced_ha.v1.4.0rc2.tmpl"
        },
        "/config/cloud/aws/f5.service_discovery.tmpl": {
         "group": "root",
