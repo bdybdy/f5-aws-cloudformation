@@ -156,7 +156,7 @@ def main():
         except URLError, error:
              err = str(error) + ": Attempting to connect to next url"
 ### Cloudlib and iApp URL
-    iApp_version = "v1.4.0rc1"
+    iApp_version = "v1.4.0rc2"
     iapp_branch = "v2.2.0"
     iapp_name = "f5.aws_advanced_ha." + str(iApp_version) + ".tmpl"
     if marketplace == "no":
