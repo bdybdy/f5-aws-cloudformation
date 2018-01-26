@@ -1,4 +1,4 @@
-# Copyright 2016. F5 Networks, Inc. See End User License Agreement (EULA) for
+# Copyright 2018. F5 Networks, Inc. See End User License Agreement (EULA) for
 # license terms. Notwithstanding anything to the contrary in the EULA, Licensee
 # may copy and modify this software product for its internal business purposes.
 # Further, Licensee may upload, publish and distribute the modified version of
@@ -2595,26 +2595,31 @@ def main() :
             region)
         verifyGeneralConstraints(len(EIPMapping) > 0, len(destinations) > 0)
 
-        # reassign elastic IPs to VIPs of this AZ
+        # reassign elastic IPs to VIPs of this AZ if device status is still active
         anyMatches = findMatchingVIPs(EIPMapping)
-        if (anyMatches > 0) :
-            aws_eip_address_takeover(EIPMapping, instance, region,
+        failoverStatus = execSuccessOrDie("tmsh show sys failover")
+        logLTM.log(logging.INFO, "tmsh show sys failover ===> " + failoverStatus)
+        #logLTM.log(logging.INFO, "find active ===> " + str(failoverStatus.find('active')))
+        if failoverStatus.find('active') > -1:
+            logLTM.log(logging.INFO, "Verified this device is still active")
+            if (anyMatches > 0) :
+                aws_eip_address_takeover(EIPMapping, instance, region,
+                    networkDescriptionCache)
+                logLTM.log(logging.INFO, "EIP takeover completed.")
+            # route management
+            routeManagment(destinations, interfaceVLAN, instance, region,
                 networkDescriptionCache)
-
-        # route management
-        routeManagment(destinations, interfaceVLAN, instance, region,
-            networkDescriptionCache)
+        else:
+            logLTM.log(logging.INFO, "Verified this device is no longer active.")
 
         networkDescriptionCache.file.close()
-        logLTM.log(logging.INFO, "EIP takeover completed.")
+        logLTM.log(logging.INFO, "Exiting " + sys.argv[0] + " script.")
     except Exception, ex:
         logLTM.logErrorAndFail("An exception of type " + type(ex).__name__ + \
             " with message " + str(sys.exc_info()[1]))
 
 if __name__ == '__main__' :
     main()
-
-
 # end of failover script
 }
 set failover_script_awscli {#!/usr/bin/env python
@@ -3472,12 +3477,13 @@ def main() :
             routeManagment(destinations, interfaceVLAN, instance, region,
                 networkDescriptionCache)
         else:
-            logLTM.log(logging.INFO, "Verified this device is no longer active")
-            
+            logLTM.log(logging.INFO, "Verified this device is no longer active.")
+
         networkDescriptionCache.file.close()
         logLTM.log(logging.INFO, "Exiting " + sys.argv[0] + " script.")
     except Exception, ex:
         logLTM.logErrorAndFail("An exception of type " + type(ex).__name__ +  " with message " + str(sys.exc_info()[1]))
+
 if __name__ == '__main__' :
     main()
 # end of failover script
